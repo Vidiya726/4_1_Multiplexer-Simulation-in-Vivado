@@ -146,7 +146,7 @@ endmodule
 // Behavioral Implementation - Skeleton
 `timescale 1ns / 1ps
 
-module MUX_4_1( I,S,Y);
+module MUX41( I,S,Y);
 input [3:0]I;
 input [1:0]S;
 output reg Y;
@@ -167,11 +167,11 @@ endmodule
 // Testbench Skeleton
 `timescale 1ns/1ps
 
-module mux_4_1_tb;
+module mux4_1_tb;
 reg [3:0]I;
 reg[1:0]S;
 wire Y;
-MUX_4_1 uut(I,S,Y);
+MUX41 uut(I,S,Y);
 initial
 begin
 I=4'b1001;
@@ -206,7 +206,7 @@ endmodule
 ```verilog
 `timescale 1ns / 1ps
 
-module mux41(a,b,s,z);
+module mux41_4(a,b,s,z);
 input a,b,s;
 output z;
 wire w1,w2;
@@ -220,9 +220,9 @@ input [3:0]i;
 input [1:0]s;
 output y;
 wiге [2:1]w;
-MUX41 M1(w[1],i[0],i[1],s[1]);
-MJX41 M2(w[2],i[2],i[3]),s[1]);
-MUX41 M3(у,w[1],w[2], s[0]);
+MUX41_4 M1(w[1],i[0],i[1],s[1]);
+MJX41_4 M2(w[2],i[2],i[3]),s[1]);
+MUX41_4 M3(у,w[1],w[2], s[0]);
 endmodule
 
 
@@ -235,7 +235,7 @@ module MUX_41_tb;
 reg [3:0]i; 
 reg [1:0]s; 
 wire y; 
-MUX_41 uut(i,s,y); 
+MUX41_4 uut(i,s,y); 
 initial 
 begin 
 i=4'B1011; 
