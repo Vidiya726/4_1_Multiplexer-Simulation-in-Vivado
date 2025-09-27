@@ -92,16 +92,16 @@ endmodule
 `timescale 1ns / 1ps
 
 module mux41(I,S,Y);
-input [3:0]I;
-input[1:0]S;
-output Y;
-wire [4:1]W;
-assign W[1]= I[0] & (~S[1]) & (~S[0]);
-assign W[2]= I[0] & (~S[1]) & S[0];
-assign W[3]= I[0] & S[1] & (~S[0]);
-assign W[4]= I[0] & S[1] & S[0];
-assign Y= W[1] | W[2] | W[3] | W[4];
-endmodule
+ input [3:0]I;
+ input[1:0]S;
+ output Y;
+ wire [4:1]W;
+ assign W[1]=(~S[0])&(~S[1])&I[0];
+ assign W[2]=(~S[0])&S[1]&I[1];
+ assign W[3]=S[0]&(~S[1])&I[2];
+ assign W[4]=S[0]&S[1]&I[3];
+ assign Y=W[1]|W[2]|W[3]|W[4];
+ endmodule
 
 ```
 ### 4:1 MUX Data flow Modelling- Testbench
@@ -110,34 +110,33 @@ endmodule
 `timescale 1ns/1ps
 
 module mux4_1_tb;
-reg [3:0]I;
-reg [1:0]S;
-wire Y;
-mux41 uut(I,S,Y);
-initial
-begin
-I=4'B0110;
-S=2'b00;
-#10
-$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
-S=2'b01;
-#10
-$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
-S=2'b10;
-#10
-$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
-S=2'b11;
-#10
-$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
-$finish;
-end 
+ reg [3:0]I;
+ reg [1:0]S;
+ wire Y;
+ mux41 uut(I,S,Y);
+ initial
+ begin
+ I=4'B0110;
+ S=2'b00;
+ #10
+ $display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+ S=2'b01;
+ #10
+ $display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+ S=2'b10;
+ #10
+ $display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+ S=2'b11;
+ #10
+ $display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+ $finish;
+ end 
 endmodule
 
 ```
 ## Simulated Output Dataflow Modelling
 
-
-<img width="1919" height="1079" alt="Screenshot 2025-08-26 213811" src="https://github.com/user-attachments/assets/71ec469f-1860-4106-b6cf-83c6735cd8a7" />
+<img width="1918" height="1078" alt="image" src="https://github.com/user-attachments/assets/e8ff7ece-d4fe-40ea-9443-8a7ceaeaa023" />
 
 
 ---
@@ -145,56 +144,54 @@ endmodule
 ```verilog
 // Behavioral Implementation - Skeleton
 `timescale 1ns / 1ps
-
-module MUX41( I,S,Y);
-input [3:0]I;
-input [1:0]S;
-output reg Y;
-always @(I,S)
-    begin
-        case(S)
-        2'b00:Y=I[0];
-        2'b01:Y=I[1];
-        2'b10:Y=I[2];
-        2'b11:Y=I[3];
-        endcase
-    end
+module MUX_4_1(i,s,y);
+input [3:0]i;
+input [1:0]s;
+output reg y;
+always @(i,s)
+ begin
+ case(s)
+ 2'b00 : y = i[0];
+ 2'b01 : y = i[1];
+ 2'b10 : y = i[2];
+ 2'b11 : y = i[3];
+ endcase
+ end
 endmodule
-
 ```
 ### 4:1 MUX Behavioral Modelling- Testbench
 ```verilog
 // Testbench Skeleton
 `timescale 1ns/1ps
 
-module mux4_1_tb;
-reg [3:0]I;
-reg[1:0]S;
-wire Y;
-MUX41 uut(I,S,Y);
+`timescale 1ns/1ps
+module MUX_4_1_tb;
+reg [3:0]i;
+reg [1:0]s;
+wire y;
+MUX_4_1 uut(i,s,y);
 initial
 begin
-I=4'b1001;
-S=2'b00;
+i=4'b1001;
+s=2'b00;
 #10;
-$display("Selection is %b %b , Output : %b",S[1],S[0],Y);
-S=2'b01;
+$display("selection %b %b, output %b",s[1],s[0],y);
+s=2'b01;
+$display("selection %b %b, output %b",s[1],s[0],y);
 #10;
-$display("Selection is %b %b , Output : %b",S[1],S[0],Y);
-S=2'b10;
+s=2'b10;
+$display("selection %b %b, output %b",s[1],s[0],y);
 #10;
-$display("Selection is %b %b , Output : %b",S[1],S[0],Y);
-S=2'b11;
+s=2'b11;
+$display("selection %b %b, output %b",s[1],s[0],y);
 #10;
-$display("Selection is %b %b , Output : %b",S[1],S[0],Y);
 $finish;
 end
 endmodule
 
 ```
 ## Simulated Output Behavioral Modelling
-
-<img width="1919" height="1079" alt="Screenshot 2025-08-26 215059" src="https://github.com/user-attachments/assets/31981bb1-be31-4b74-bf73-6fdd59c0204b" />
+<img width="1918" height="1078" alt="image" src="https://github.com/user-attachments/assets/88d90248-3cc3-4a71-b0d9-4ec94a457bf7" />
 
 
 
@@ -205,24 +202,23 @@ endmodule
 
 ```verilog
 `timescale 1ns / 1ps
-
-module mux41_4(a,b,s,z);
-input a,b,s;
-output z;
-wire w1,w2;
-and g1(w1,a,~s);
-and 2(w2,b,s);
-or g3(z,w1,w2);
+module MUX21(A,B,S,Z);
+input A,B,S;
+output Z;
+wire W1,W2;
+and g1(W1,A,~S);
+and g2(W2,B,S);
+or g3(Z,W1,W2);
 endmodule
 
-module MUX_41(i,s,y);
-input [3:0]i;
-input [1:0]s;
-output y;
-wiге [2:1]w;
-MUX41_4 M1(w[1],i[0],i[1],s[1]);
-MJX41_4 M2(w[2],i[2],i[3]),s[1]);
-MUX41_4 M3(у,w[1],w[2], s[0]);
+module MUX_41(I,S,Y);
+input [3:0]I;
+input [1:0]S;
+output Y;
+wire [2:1]W;
+MUX21 M1(.Z(W[1]),.A(I[0]),.B(I[1]),.S(S[1]));
+MUX21 M2(.Z(W[2]),.A(I[2]),.B(I[3]),.S(S[1]));
+MUX21 M3(.Z(Y),.A(W[1]),.B(W[2]),.S(S[0]));
 endmodule
 
 
@@ -230,34 +226,32 @@ endmodule
 ### Testbench Implementation
 ```verilog
 `timescale 1ns / 1ps
-
-module MUX_41_tb; 
-reg [3:0]i; 
-reg [1:0]s; 
-wire y; 
-MUX41_4 uut(i,s,y); 
-initial 
-begin 
-i=4'B1011; 
-s=2'b00; 
-#10 
-$display("Selection is %b %b , output : %b ", s[1],s[0],y); 
-s=2'b01; 
-#10 
-$display("Selection is %b %b , output : %b ", s[1],s[0],y); 
-s=2'b10; 
-#10 
-$display("Selection is %b %b , output : %b ", s[1],s[0],y); 
-s=2'b11; 
-#10 
-$display("Selection is %b %b , output : %b ", s[1],s[0],y); 
+module MUX_41_tb;
+reg [3:0]I;
+reg [1:0]S;
+wire Y;
+MUX_41 uut(I,S,Y);
+initial
+begin
+I=4'B1001;
+S=2'b00;
+#10
+$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+S=2'b01;
+#10
+$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+S=2'b10;
+#10
+$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
+S=2'b11;
+#10
+$display("Selection is %b %b , output : %b ", S[1],S[0],Y);
 $finish;
 end
 endmodule
 ```
 ## Simulated Output Structural Modelling
-
-<img width="1919" height="1078" alt="Screenshot 2025-08-29 135533" src="https://github.com/user-attachments/assets/09b64c58-7f85-405f-8c42-bad0ce285dc2" />
+<img width="1918" height="1078" alt="image" src="https://github.com/user-attachments/assets/5b840312-3e91-446f-a3e7-57c97c2c3137" />
 
 ---
 ### CONCLUSION
